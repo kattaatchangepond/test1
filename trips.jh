@@ -1,0 +1,117 @@
+
+
+
+
+
+
+entity User {username String}
+
+entity Farmer {
+farmername String,
+mobile String,
+farmerStatus Boolean,
+farmerLat String,
+farmerLong String,
+createdDate Instant,
+createdBy String,
+modifiedDate Instant,
+modifiedBy String
+
+}
+
+entity Farmerfield {
+fieldname String,
+wavepointsAvl Boolean
+startpointLat String,
+startpointLong String,
+createdDate Instant,
+createdBy String,
+modifiedDate Instant,
+modifiedBy String
+
+}
+
+entity Wavepoints {
+seqno Int,
+wavepointLat String, 
+wavepointLong String
+createdDate Instant,
+createdBy String,
+modifiedDate Instant,
+modifiedBy String
+}
+
+
+entity Trucker {
+truckername String,
+mobile String,
+deletedStatus String,
+createdDate Instant,
+createdBy String,
+modifiedDate Instant,
+modifiedBy String
+}
+
+entity TruckerRate
+{
+effectiveFrom Instant,
+rate Long,
+createdDate Instant,
+createdBy String,
+modifiedDate Instant,
+modifiedBy String
+}
+
+entity TruckStatus {
+status String
+}
+
+entity Requests {
+requestDate Instant,
+noOfTrucks Int,
+convertedToJob Boolean
+createdDate Instant,
+createdBy String,
+requestStatus String
+}
+
+entity Trip {
+assignedDriver Int,
+requestedDatetime Instant,
+arrivedDatetime Instant,
+departedDatetime Instant,
+billofLading String,
+scaleTicket	 String
+farmerTripNotes String,
+tripStatus String
+}
+
+
+
+relationship OneToOne {
+	Farmerfield{farmer} to Farmer,
+    Trucker to TruckStatus,
+    Trip to Trucker
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Farmerfield{field} to Wavepoints,
+    Trucker{truck} to TruckerRate,
+    Requests{request} to Trip,
+    Farmer{farmer} to Requests
+
+}
+
+
+// Set pagination options
+paginate Farmer, Trucker, Wavepoints with infinite-scroll
+paginate Requests, Trip with pagination
+
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl 
+// Set an angular suffix
+angularSuffix * with cpt
